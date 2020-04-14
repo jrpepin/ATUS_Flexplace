@@ -1,0 +1,6 @@
+setup_joanna.do
+results/
+*.dta
+*.dat
+*.gz
+
