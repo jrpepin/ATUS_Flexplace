@@ -3,7 +3,6 @@
 * flexplace_activities.do
 * Richard Petts and Joanna Pepin
 *-------------------------------------------------------------------------------
-
 * The goal of this file is to create the activity variables.
 
 ********************************************************************************
@@ -16,7 +15,7 @@ foreach f of local list {
     erase "`f'"
 }
 
-log using "$logdir/flexplace_activities_`logdate'.log", replace
+log using "$logdir/flexplace_activities_`logdate'.log", t replace
 
 di "$S_DATE"
 
