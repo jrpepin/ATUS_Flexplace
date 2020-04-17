@@ -190,10 +190,10 @@ svy: reg hwdaily 	i.onlyhome##i.spFT 		$IV2
 		ytitle("Routine Housework") ///
 		title("{bf:Figure 1}: Minutes Spent in Routine Housework by Whether Father Works From Home", span)
 
-	graph export "$results\flexplace_Figure1.png", replace
-		graph export "$results\flexplace_Figure1.svg", replace
+	graph export "$results\flexplace_Figure1.pdf", replace
+	// Manual: Open pdf figure and save as tif. 
+	//			Click "Settings" in save window to set resolution to 300 dpi
 
-	mygraph.eps, preview(on
 
 // Figure 2 --------------------------------------------------------------------
 svy: reg hwdaily 	i.dayshome##i.spFT 	$IV2
@@ -228,6 +228,9 @@ est store int2
 		ytitle("Routine Housework") ///
 		title("{bf:Figure 2}: Minutes Spent in Routine Housework by Days Father Works From Home", span) 
 
-	graph export "$results\flexplace_Figure2.tif", replace
+	graph export "$results\flexplace_Figure2.pdf", replace
+		// Manual: Open pdf figure and save as tif. 
+		//			Click "Settings" in save window to set resolution to 300 dpi
+
 
 log close
