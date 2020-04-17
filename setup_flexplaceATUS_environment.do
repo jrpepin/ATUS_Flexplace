@@ -69,3 +69,30 @@ if (_rc) {
         `"you can do so by clicking this link: {stata "ssc install fre":auto-install fre}"'
     exit 199
 }
+
+// spost13_ado: https://jslsoc.sitehost.iu.edu/stata
+capture : which mlincom 
+if (_rc) {
+    display as error in smcl `"Please install package {it:spost13_ado} in order to run these do-files;"' 	_newline ///
+        `"you can do so by typing the following commands:"' 												_newline ///
+		`"net from https://jslsoc.sitehost.iu.edu/stata/"'													_newline ///
+		`"net install spost13_ado"'
+    exit 199
+}
+
+// coefplot: http://repec.sowi.unibe.ch/stata/coefplot/index.html
+capture : which coefplot
+if (_rc) {
+    display as error in smcl `"Please install package {it:coefplot} from SSC in order to run these do-files;"' _newline ///
+        `"you can do so by clicking this link: {stata "ssc install coefplot":auto-install coefplot}"'
+    exit 199
+}
+
+// blindschemes: https://ideas.repec.org/c/boc/bocode/s458251.html
+set scheme plotplain
+capture confirm set scheme plotplain
+if _rc!=0{
+    display as error in smcl `"Please install package {it:blindschemes} from SSC in order to run these do-files;"' _newline ///
+        `"you can do so by clicking this link: {stata "ssc install blindschemes":auto-install blindschemes}"'
+    exit 199
+}
