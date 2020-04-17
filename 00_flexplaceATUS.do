@@ -31,12 +31,12 @@
 ********************************************************************************
 * The data for this analysis were downloaded from [https://www.atusdata.org/]
 
-* Instructions for downloading and decompressing the data-----------------------
+* Instructions for downloading and decompressing the data ----------------------
   * Create the two data extracts described below.
   * https://usa.ipums.org/usa/extract_instructions.shtml
   * Do steps 1 and 2 (skip step 3)
 
-// 1. DemoData------------------------------------------------------------------
+// 1. DemoData -----------------------------------------------------------------
 * SAMPLES:          2017-2018
 * STRUCTURE:		Rectangular (person)
 * SAMPLE MEMBERS:	Respondents
@@ -49,18 +49,28 @@
 	*	"wrkhomeable"	"wrkhomeev"		"wrkhomepd"		"wrkhomersn"	"wrkhomedays"
 	*	"wrkhomeoften"	"lv_resp"		"lvwt"			"rlvwt_1" ....	"rlvwt_160"
 
-// 2. ActData-------------------------------------------------------------------
+// 2. ActData ------------------------------------------------------------------
 * SAMPLES:          2003-2018
 * STRUCTURE:		Hierarchical
 * SAMPLE MEMBERS:	Respondents
 * VARIABLES:
-
-
+	*	"rectype" 		"year"      	"caseid"   	 	"pernum"    	"lineno"
+    *	"wt06"      	"actline"   	"activity" 		"duration"
+	*	"start"			"stop"
 
 ********************************************************************************
 * C. Data Import and Measures Creation
 ********************************************************************************
 
-// Create sample & IVs----------------------------------------------------------
-	do "flexplace_sample & IVs"
+// Create sample & IVs ---------------------------------------------------------
+	do "01_flexplace_sample & IVs"
 
+// Create activity measures ----------------------------------------------------
+	do "02_flexplace_activities"
+	
+********************************************************************************
+* D. Analyses
+********************************************************************************
+
+// Create tables and figures ---------------------------------------------------
+	do "03_flexplace_analyses"
