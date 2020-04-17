@@ -9,14 +9,14 @@
 ********************************************************************************
 * Setup the log file
 ********************************************************************************
-local logdate = string( d(`c(current_date)'), "%dCY.N.D" ) 			// Create a macro for the date
+local logdate = string( d(`c(current_date)'), "%dCY.N.D" ) 			// create a macro for the date
 
-local list : dir . files "$logdir/*flexplace_sample & IVs_*.log"	// Delete earlier versions of the log
+local list : dir . files "$logdir\*flexplace_sample & IVs_*.log"	// Delete earlier versions of the log
 foreach f of local list {
     erase "`f'"
 }
 
-log using "$logdir/flexplace_sample & IVs_`logdate'.log", t replace
+log using "$logdir\flexplace_sample & IVs_`logdate'.log", t replace
 
 di "$S_DATE"
 
@@ -98,6 +98,18 @@ tab			wkhomewhy, gen(WHW)	// Creates dummy variables
 fre			wrkhomedays
 cap drop	onlyhome
 recode 		wrkhomedays (1=1 "Yes") (else=0 "No | NA"), generate (onlyhome)
+
+cap drop	OHW*
+tab			onlyhome, gen(OHW)	// Creates dummy variables
+
+// lejf_15 -- Edited: How often do you work only at home?
+fre			wrkhomeoften
+cap drop 	dayshome
+vreverse 	wrkhomeoften if wrkhomeoften != 98, gen(dayshome)
+replace		dayshome = 0 if dayshome ==.
+
+cap drop	DH*
+tab			dayshome, gen(DH)	// Creates dummy variables
 
 ********************************************************************************
 * Demographic Variables
@@ -239,3 +251,5 @@ recode day (2/6=0 "weekday") (else=1 "weekend"), generate (weekend)
 // Temporarily save the dataset
 
 save "$tempdir\flexplace_demo.dta", replace
+
+log close
