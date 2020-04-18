@@ -46,6 +46,11 @@ svyset [pw=lvwt], sdrweight(rlvwt_1-rlvwt_160)
 ********************************************************************************
 * Table 1. Summary Statistics
 ********************************************************************************
+putexcel set "$results\flexplace_table1", replace
+putexcel A1 = "Variable"
+putexcel A2 = "Mean"
+putexcel A3 = "Std. Dev."
+
 
 // Descriptive statistics
 svy: mean 	hwall hwdaily hwelse ccall ccphys ccdaily  	///
@@ -57,6 +62,9 @@ svy: mean 	hwall hwdaily hwelse ccall ccphys ccdaily  	///
 			spFT prof fulltime faminc 					///
 			weekend holiday 
 estat sd
+
+putexcel B1=matrix(r(mean)),	nformat("#.##") colnames 
+putexcel B3=matrix(r(sd)), 		nformat("#.##")
 
 ********************************************************************************
 * Main Effects
