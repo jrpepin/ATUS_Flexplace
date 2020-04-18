@@ -163,74 +163,86 @@ svy: reg ccphys 	i.dayshome##i.spFT 		$IV2
 
 // Figure 1 --------------------------------------------------------------------
 svy: reg hwdaily 	i.onlyhome##i.spFT 		$IV2
+	est store int1	// Store the model estimates in memory
 
-	est store int1
-	margins, at(spFT=(0 1) onlyhome=(0 1)) post
+			// Calcuate the predictions for paper write-up
+			margins, at(spFT=(0 1) onlyhome=(0 1)) post
+				mlincom 2-1
+				mlincom 4-3
+				mlincom 4-2
+				mlincom 3-1
+				mlincom (4-2) - (3-1)
 
-	mlincom 2-1
-	mlincom 4-3
-	mlincom 4-2
-	mlincom 3-1
-	mlincom (4-2) - (3-1)
-
+	// Predicted estimtes when partner not-employed full-time
 	est restore int1
 	margins if spFT==0, at(onlyhome=(0 1)) post
 	est store int1a
 	 
+	// Predicted estimtes when partner is employed full-time
 	est restore int1
 	margins if spFT==1, at(onlyhome=(0 1)) post
 	est store int1b
 
-	coefplot (int1a) (int1b), ///
-		vertical recast(bar) barw(0.3) level(68) ///
-		ciopts(recast(rcap) color(gs10)) citop ///
-		legend(order(1 "Does Not Work Full Time" 3 "Works Full Time") ///
-		title("Partner Work Status", size(medsmall))) ///
-		xlab(1 "Does Not Work from Home" 2 "Works From Home") ylab(20(5)70) ///
-		ytitle("Routine Housework") ///
-		title("{bf:Figure 1}: Minutes Spent in Routine Housework by Whether Father Works From Home", span)
+	// Create Figure 1
+	coefplot (int1a) (int1b), 													///
+		vertical recast(bar) barw(0.3) level(68) 								///
+		ciopts(recast(rcap) color(gs10)) citop 									///
+		legend(order(1 "Does Not Work Full Time" 3 "Works Full Time") 			///
+		title("Partner Work Status", size(medsmall))) 							///
+		xlab(	1 `" "Father Does Not" "Work from Home" "' 						///
+				2 `" "Father Works" "From Home" "') 							///
+		ylab(20(5)70) 															///
+		ytitle("Housework Minutes Per Day") 									///
+		title("{bf:Figure 1}: Fathers' Time Spent in Routine Housework" 		///
+				"by Fathers' Use of Flexplace Benefits", span)
 
+	// Save Figure 1
 	graph export "$results\flexplace_Figure1.pdf", replace
-	// Manual: Open pdf figure and save as tif. 
-	//			Click "Settings" in save window to set resolution to 300 dpi
+	* Manual: Open pdf figure and save as tif. 
+	*			Click "Settings" in save window to set resolution to 300 dpi
 
 
 // Figure 2 --------------------------------------------------------------------
 svy: reg hwdaily 	i.dayshome##i.spFT 	$IV2
-est store int2
+est store int2		// Store the model estimates in memory
 
-	margins, at(dayshome=(0 1 2 3 4) spFT=(0 1)) post
+			// Calcuate the predictions for paper write-up
+			margins, at(dayshome=(0 1 2 3 4) spFT=(0 1)) post
+				mlincom 2-1
+				mlincom 4-3
+				mlincom (4-3) - (2-1)
+				mlincom 6-5
+				mlincom (6-5) - (2-1)
+				mlincom 8-7
+				mlincom (8-7) - (2-1)
+				mlincom 10-9
+				mlincom (10-9)- (2-1)
 
-	mlincom 2-1
-	mlincom 4-3
-	mlincom (4-3) - (2-1)
-	mlincom 6-5
-	mlincom (6-5) - (2-1)
-	mlincom 8-7
-	mlincom (8-7) - (2-1)
-	mlincom 10-9
-	mlincom (10-9) - (2-1)
-
+	// Predicted estimtes when partner not-employed full-time
 	est restore int2
 	margins if spFT==0, at(dayshome=(0 1 2 3 4)) post
 	est store int2a
-	 
+	
+	// Predicted estimtes when partner is employed full-time
 	est restore int2
 	margins if spFT==1, at(dayshome=(0 1 2 3 4)) post
 	est store int2b
 
-	coefplot (int2a) (int2b), ///
-		vertical recast(bar) barw(0.3) level(68) ///
-		ciopts(recast(rcap) color(gs10)) citop ///
-		legend(order(1 "Does Not Work Full Time" 3 "Works Full Time") ///
-		title("Partner Work Status", size(medsmall))) ///
-		xlab(1 "Never" 2 "< Monthly" 3 "Monthly" 4 "1-2 times/wk" 5 "3 days+/wk") ylab(20(5)75) ///
-		ytitle("Routine Housework") ///
-		title("{bf:Figure 2}: Minutes Spent in Routine Housework by Days Father Works From Home", span) 
+	// Create Figure 2
+	coefplot (int2a) (int2b), 														///
+		vertical recast(bar) barw(0.3) level(68) 									///
+		ciopts(recast(rcap) color(gs10)) citop 										///
+		legend(order(1 "Does Not Work Full Time" 3 "Works Full Time") 				///
+		title("Partner Work Status", size(medsmall))) 								///
+		xlab(1 "Never" 2 "< Monthly" 3 "Monthly" 4 "1-2 times/wk" 5 "3 days+/wk") 	///
+		ylab(20(5)75) 																///
+		ytitle("Housework Minutes Per Day") 										///
+		title("{bf:Figure 2}: Fathers' Daily Minutes Spent in Routine Housework" 	///
+		"by Fathers' Frequency of Using Flexplace Benefits", span) 
 
+	// Save Figure 2
 	graph export "$results\flexplace_Figure2.pdf", replace
-		// Manual: Open pdf figure and save as tif. 
-		//			Click "Settings" in save window to set resolution to 300 dpi
-
+		* Manual: Open pdf figure and save as tif. 
+		*			Click "Settings" in save window to set resolution to 300 dpi
 
 log close
