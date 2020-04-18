@@ -43,22 +43,23 @@ keep if year == 2017 | year == 2018
 // All household labor
 cap drop 		hwtotal
 gen 			hwtotal=.
-foreach i in 	020101 	020102 	020103 	020104 	020199							///
-				020201 	020202 	020203 	020299									///
-				070101 	180701													///
-				020301 	020302 	020303 	020399									///
-				020401 	020402 	020499 											///
-				020501 	020502 	020599 	180904									///
-				020681 	020699 	180807 	180903									///
-				020701 	020799 	020801 	020899									///
-				020901 	020902 	020903 	020904 	020905 	020999					///
-				029999															///
-				080201 	080202 	080203 	080299									///
-				080701 	080702 	080799 	080699 									///
-				090101 	090102 	090103 	090104 	090199							///
-				090201 	090202 	090299 	090301 	090302 	090399 	090401 			///
-				090402 	090499	090501 	090502 	090599 	099999 	160106			///
-				180901	180902	180905	180999	180208	{
+foreach i in 	020101 	020102 	020103 	020104 	020199							/// /* Cleaning Laundry Sewing Storing MiscHW 	*/
+				020201 	020202 	020203 	020299									///	/* Cooking FoodPres Dishes Miscfood 		*/
+				070101 	180701													///	/* Grocery GroTravel					  	*/
+				020301 	020302 	020303 	020399									///	/* Interior 								*/
+				020401 	020402 	020499 											///	/* Exterior 								*/
+				020501 	020502 	020599 	180904									///	/* Lawn 									*/
+				020681 	020699 	180807 	180903									/// /* Petcare 									*/
+				020701 	020799 	020801 	020899									///	/* Vehicle 									*/
+				020901 	020902 	020903 	020904 	020905 	020999					///	/* HHmanage 								*/
+				029999															///	/* Household activities, n.e.c.*			*/
+				080201 	080202 	080203 	080299									/// /* HH banking 								*/
+				080701 	080702 	080799 	080699 									///	/* Veterinary Services						*/
+				090101 	090102 	090103 	090104 	090199							///	/* Household Services (not done by self)	*/
+				090201 	090202 	090299 	090301 	090302 	090399 	 				///	/* HH main/Repair/Décor/Const. (NDBS)		*/
+				090401	090402 	090499											///	/* Lawn & Garden Services (NDBS)			*/
+				090501 	090502 	090599 	099999 	160106							///	/* Vehicle Maintenance & Repair (NDBS)		*/
+				180901	180902	180905	180999	180208	{							/* Travel Related to Using HH Services		*/
 	replace 	hwtotal=1 if activity == `i'
  	 }
 replace 		hwtotal=0 if hwtotal==.
@@ -140,8 +141,9 @@ label var 		ccphys "Physical Childcare"
 *?*?*?*? Think about replacing physical with routine??
 cap drop		dailycare
 gen 			dailycare=.
-foreach i in 		030101 	030108	030109	030110 	030111 	030112 	030199 	030204 	///
-					030299 	030301 	030302 	030303 	030399	{
+foreach i in 		030101 	030108	030109	030110 	030111 	030112 	030199 		///
+					030204 	030299 												///
+					030301 	030302 	030303 	030399	{
 	replace		dailycare=1 if activity == `i'
 	}
 replace			dailycare=0 if dailycar==.
