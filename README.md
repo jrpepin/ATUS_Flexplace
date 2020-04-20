@@ -3,7 +3,7 @@ Flexplace work and fathers' childcare and housework
 By: Daniel Carlson, Richard Petts, Joanna Pepin
 
 -------------------------------------------------------------------------------
-The goal of these files is to investigate the association between time spent working from home, among fathers in different-sex partnerships, and time spent in housework and childcare
+The goal of these files is to investigate the association between time spent working from home, among fathers in different-sex partnerships, and time spent in housework and childcare.
 
 ## Data
 The data for this analysis were downloaded from [IPUMS Time Use](https://www.atusdata.org/atus/).  
