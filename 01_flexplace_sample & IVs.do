@@ -97,6 +97,7 @@ tab			wkhomewhy, gen(WHW)	// Creates dummy variables
 fre			wrkhomedays
 cap drop	onlyhome
 recode 		wrkhomedays (1=1 "Yes") (else=0 "No | NA"), generate (onlyhome)
+label variable onlyhome "Days worked exclusively at home Y/N"
 
 cap drop	ONhomewhy
 gen 		ONhomewhy=1 if onlyhome==1	&	 wrkhomersn==3
@@ -108,6 +109,7 @@ replace 	ONhomewhy=5 if onlyhome==0
 label define whylbl 1 "Family reasons" 	2 "Work reasons" 3 "Reduce commute" ///
 					4 "Other Reasons" 	5 "Never work from home"
 label values ONhomewhy whylbl
+label variable ONhomewhy "Main reason for work at home"
 
 cap drop	OHW*
 tab			ONhomewhy, gen(OHW)	// Creates dummy variables
@@ -122,7 +124,8 @@ cap drop 	dayshome
 recode		wrkhomedays (0=0 "None") (1=1 "Less than monthly") 					///
 						(2/3=2 "At least monthly") (4/5=3 "1-2 times a week")	///
 						(6/7=4 "3 days or more a week"), generate (dayshome)
-
+label variable dayshome "How often work exclusively at home"
+						
 cap drop	DH*
 tab			dayshome, gen(DH)	// Creates dummy variables
 
@@ -139,7 +142,6 @@ gen			male =	sex == 1
 fre 		age
 
 ** Parent variables ------------------------------------------------------------
-*?*?*?*?* The kidund3 and kid3to5 vars are different than RP
 
 // Number of children in the household
 clonevar	numkids = hh_numkids
@@ -148,10 +150,10 @@ clonevar	numkids = hh_numkids
 clonevar	child 	= hh_child
 
 // Presence of young children in the household
-
 cap drop	kidund3
 gen			kidund3 = 0
 replace		kidund3	= 1 if kidund1 == 1 | kid1to2 == 1
+label variable kidund3 "Own child under 3 in household"
 
 // Preschool child present in household
 fre 		kid3to5
@@ -166,36 +168,40 @@ replace				raceeth = 3 if 				 hispan != 100	// Hispanic
 replace				raceeth = 4 if race == 131 & hispan == 100	// Asian
 replace				raceeth = 5 if race >= 132 & hispan == 100	// Othrace
 
+label define racelbl 1 "White" 2 "Black" 3 "Hispanic" 4 "Asian" 5 "Othrace"
+label values raceeth racelbl
+label variable raceeth "Race/Ethnicity"
+
 gen white		=	raceeth==1
 gen black		=	raceeth==2
 gen hispanic	=	raceeth==3 
 gen asian		=	raceeth==4
-gen othrace		=	raceeth==5 // *?*?*?*?* This is different than RP. I think bc corrects hispan othrace
-							// new othrace: 106 old 211
+gen othrace		=	raceeth==5
 							
-label define racelbl 1 "White" 2 "Black" 3 "Hispanic" 4 "Asian" 5 "Othrace"
-label values raceeth racelbl
 							
 ** Respondents' Education ------------------------------------------------------
 fre educ
 cap drop educat
 recode educ (10/17=1 "belowhs") (20/21=2 "hs") (30/32=3 "smcoll") ///
 			(40=4 "bach") (41/43=5 "addeg"), generate (educat)
-			
+
+label variable educat "Education"
+		
 gen belowhs		=	educat==1
 gen hs			=	educat==2
 gen smcoll		=	educat==3
 gen bach		=	educat==4
 gen addeg		=	educat==5
-
-			
+	
 ** Respondents' Employment -----------------------------------------------------
 cap drop 	fulltime
 gen			fulltime = fullpart==1
+label variable fulltime "R employed fulltime"
 
 ** Respondents' Occupation -----------------------------------------------------
 cap drop 	prof
 recode		occ2 (110/127 = 1) (else = 0), gen(prof)
+label variable prof "Professional Occupation"
 			
 ** Respondents' Marital Status -------------------------------------------------
 tab marst spousepres
@@ -205,7 +211,7 @@ cap drop 	married
 cap drop 	cohab
 gen 		married = spousepres==1
 gen 		cohab	= spousepres==2
-
+label variable cohab "Cohabiting"
 
 ** Spouse/Partner Employment ---------------------------------------------------
 fre spempnot
@@ -218,6 +224,7 @@ replace		spemp = 3 if spempnot 	== 1 & (spusualhrs >=35 &  spusualhrs <= 99)
 
 cap drop	spFT
 gen			spFT = spemp==3
+label variable spFT "Spouse Employed Full-time"
 
 ** Same-sex Couples ------------------------------------------------------------
 cap drop 	samesex
@@ -235,6 +242,7 @@ fre holiday
 // Diary was completed on a weekend
 cap drop 	weekend
 recode day (2/6=0 "weekday") (else=1 "weekend"), generate (weekend)
+label variable weekend "ATUS diary was completed on a weekend"
 
 ********************************************************************************
 * SAMPLE SELECTION RESTRICTED TO PARTNERED FATHERS
