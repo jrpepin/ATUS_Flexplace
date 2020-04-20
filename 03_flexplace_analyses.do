@@ -218,7 +218,7 @@ svy: reg hwdaily 	i.dayshome##i.spFT 	$IV2
 est store int2		// Store the model estimates in memory
 
 			// Calcuate the predictions for paper write-up
-			margins dayshome, over(spFT)
+			margins dayshome, over(spFT)  post
 			margins, at(dayshome=(0 1 2 3 4) spFT=(0 1)) post
 				mlincom 2-1
 				mlincom 4-3
