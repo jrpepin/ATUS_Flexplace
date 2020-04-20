@@ -41,7 +41,7 @@ svyset [pw=lvwt], sdrweight(rlvwt_1-rlvwt_160)
 	* spFT professional fulltime faminc
 	* holiday weekend
 // Activity variables
-	* hwall hwdaily hwelse ccall ccphys ccdaily
+	* hwall hwdaily hwelse ccall ccdaily ccphys
 
 ********************************************************************************
 * Table 1. Summary Statistics
@@ -53,7 +53,7 @@ putexcel A3 = "Std. Dev."
 
 
 // Descriptive statistics
-svy: mean 	hwall hwdaily hwelse ccall ccphys ccdaily  	///
+svy: mean 	hwall hwdaily hwelse ccall ccdaily ccphys  	///
 			onlyhome OHW1-OHW5 DH1-DH5 					///
 			age numkids kidund3 kid3to5  				///
 			white black hispanic asian othrace 			///
@@ -70,22 +70,21 @@ putexcel B3=matrix(r(sd)), 		nformat("#.##")
 * Main Effects
 ********************************************************************************
 // Create a list of the independent variables
-global IV1 "i.cohab spFT numkids kidund3 kid3to5 ib2.educat prof fulltime faminc age i.raceeth weekend holiday"
+global IV1 "spFT 	i.cohab numkids kidund3 kid3to5 ib2.educat prof fulltime faminc age i.raceeth weekend holiday"
 // Create a list of the independent variables without spouse' employment
-global IV2 "i.cohab numkids kidund3 kid3to5 ib2.educat prof fulltime faminc age i.raceeth weekend holiday"
+global IV2 "		i.cohab numkids kidund3 kid3to5 ib2.educat prof fulltime faminc age i.raceeth weekend holiday"
 
 // Create a list of the table format options
-global format "excel sideway stats(coef aster se) dec(2) alpha(0.001, 0.01, 0.05) label"
+global format "excel sideway stats(coef aster se) dec(2) alpha(0.001, 0.01, 0.05) label noparen"
 
 // Table 2 ---------------------------------------------------------------------
 * Association between Working from Home and Total Housework 
-
 svy: reg hwall 		onlyhome 				$IV1
 	outreg2 using "$results\flexplace_table2", replace 	ctitle(Model 1) $format
 svy: reg hwall 		ib5.ONhomewhy 			$IV1
 	outreg2 using "$results\flexplace_table2", append	ctitle(Model 2)	$format
 svy: reg hwall 		i.dayshome	 			$IV1
-	outreg2 using "$results\flexplace_table2", append	ctitle(Model 3) $format
+	outreg2 using "$results\flexplace_table2", append	ctitle(Model 3) $format sortvar(onlyhome ONhomewhy dayshome)
 
 // Table 3 ---------------------------------------------------------------------
 * Association between Working from Home and Routine/Nonroutine Housework 
@@ -103,7 +102,7 @@ svy: reg hwelse 	onlyhome 				$IV1
 svy: reg hwelse 	ib5.ONhomewhy 			$IV1
 	outreg2 using "$results\flexplace_table3", append 	ctitle(Model 5) $format
 svy: reg hwelse 	i.dayshome	 			$IV1
-	outreg2 using "$results\flexplace_table3", append 	ctitle(Model 6) $format
+	outreg2 using "$results\flexplace_table3", append 	ctitle(Model 6) $format sortvar(onlyhome ONhomewhy dayshome)
 
 // Table 4 ---------------------------------------------------------------------
 * Association between Working from Home and Childcare 
@@ -115,13 +114,13 @@ svy: reg ccall 		ib5.ONhomewhy 			$IV1
 	outreg2 using "$results\flexplace_table4", append 	ctitle(Model 2) $format
 svy: reg ccall 		i.dayshome	 			$IV1
 	outreg2 using "$results\flexplace_table4", append 	ctitle(Model 3) $format
-// Physical Childcare ----------------------------------------------------------
-svy: reg ccphys 	onlyhome 				$IV1
+// Routine Childcare -----------------------------------------------------------
+svy: reg ccdaily 	onlyhome 				$IV1
 	outreg2 using "$results\flexplace_table4", append 	ctitle(Model 4) $format
-svy: reg ccphys 	ib5.ONhomewhy 			$IV1
+svy: reg ccdaily 	ib5.ONhomewhy 			$IV1
 	outreg2 using "$results\flexplace_table4", append 	ctitle(Model 5) $format
-svy: reg ccphys 	i.dayshome				$IV1
-	outreg2 using "$results\flexplace_table4", append 	ctitle(Model 6) $format
+svy: reg ccdaily 	i.dayshome				$IV1
+	outreg2 using "$results\flexplace_table4", append 	ctitle(Model 6) $format sortvar(onlyhome ONhomewhy dayshome)
 
 ********************************************************************************
 * Interactions with spouse employment
@@ -131,39 +130,43 @@ svy: reg ccphys 	i.dayshome				$IV1
 
 // Panel A: WORKS FROM HOME ----------------------------------------------------
 svy: reg hwall 		i.onlyhome##i.spFT 		$IV2
-	outreg2 using "$results\flexplace_table5A", replace ctitle(Model 1) $format
+	outreg2 using "$results\flexplace_table5A", replace ctitle(Model 1) $format drop($IV2)
 svy: reg hwdaily 	i.onlyhome##i.spFT 		$IV2
-	outreg2 using "$results\flexplace_table5A", append 	ctitle(Model 2) $format
+	outreg2 using "$results\flexplace_table5A", append 	ctitle(Model 2) $format drop($IV2)
 svy: reg hwelse 	i.onlyhome##i.spFT 		$IV2
-	outreg2 using "$results\flexplace_table5A", append 	ctitle(Model 3) $format
+	outreg2 using "$results\flexplace_table5A", append 	ctitle(Model 3) $format drop($IV2)
 svy: reg ccall	 	i.onlyhome##i.spFT 		$IV2
-	outreg2 using "$results\flexplace_table5A", append 	ctitle(Model 4) $format
-svy: reg ccphys 	i.onlyhome##i.spFT 		$IV2
-	outreg2 using "$results\flexplace_table5A", append 	ctitle(Model 5) $format
+	outreg2 using "$results\flexplace_table5A", append 	ctitle(Model 4) $format drop($IV2)
+svy: reg ccdaily 	i.onlyhome##i.spFT 		$IV2
+	outreg2 using "$results\flexplace_table5A", append 	ctitle(Model 5) $format drop($IV2) sortvar(onlyhome ONhomewhy dayshome)
 
 // Panel B: WHY WORKS FROM HOME ------------------------------------------------
 svy: reg hwall 		ib5.ONhomewhy##i.spFT 	$IV2
-	outreg2 using "$results\flexplace_table5B", replace ctitle(Model 1) $format
+	outreg2 using "$results\flexplace_table5B", replace ctitle(Model 1) $format drop($IV2)
 svy: reg hwdaily 	ib5.ONhomewhy##i.spFT 	$IV2
-	outreg2 using "$results\flexplace_table5B", append 	ctitle(Model 2) $format
+	outreg2 using "$results\flexplace_table5B", append 	ctitle(Model 2) $format drop($IV2)
 svy: reg hwelse 	ib5.ONhomewhy##i.spFT 	$IV2
-	outreg2 using "$results\flexplace_table5B", append 	ctitle(Model 3) $format
+	outreg2 using "$results\flexplace_table5B", append 	ctitle(Model 3) $format drop($IV2)
 svy: reg ccall 		ib5.ONhomewhy##i.spFT 	$IV2
-	outreg2 using "$results\flexplace_table5B", append 	ctitle(Model 4) $format
-svy: reg ccphys 	ib5.ONhomewhy##i.spFT 	$IV2
-	outreg2 using "$results\flexplace_table5B", append 	ctitle(Model 5) $format
+	outreg2 using "$results\flexplace_table5B", append 	ctitle(Model 4) $format drop($IV2)
+svy: reg ccdaily 	ib5.ONhomewhy##i.spFT 	$IV2
+	outreg2 using "$results\flexplace_table5B", append 	ctitle(Model 5) $format drop($IV2) sortvar(onlyhome ONhomewhy dayshome)
+
+	// Calculate predicted minutes
+	svy: reg hwdaily 	ib5.ONhomewhy##i.spFT 	$IV2
+	margins ONhomewhy, over(spFT)
 
 // Panel C: DAYS WORK FROM HOME ------------------------------------------------
 svy: reg hwall 		i.dayshome##i.spFT 		$IV2
-	outreg2 using "$results\flexplace_table5C", replace ctitle(Model 1) $format
+	outreg2 using "$results\flexplace_table5C", replace ctitle(Model 1) $format drop($IV2)
 svy: reg hwdaily 	i.dayshome##i.spFT 		$IV2
-	outreg2 using "$results\flexplace_table5C", append 	ctitle(Model 2) $format
+	outreg2 using "$results\flexplace_table5C", append 	ctitle(Model 2) $format drop($IV2)
 svy: reg hwelse 	i.dayshome##i.spFT 		$IV2
-	outreg2 using "$results\flexplace_table5C", append 	ctitle(Model 3) $format
+	outreg2 using "$results\flexplace_table5C", append 	ctitle(Model 3) $format drop($IV2)
 svy: reg ccall 		i.dayshome##i.spFT 		$IV2
-	outreg2 using "$results\flexplace_table5C", append 	ctitle(Model 4) $format
-svy: reg ccphys 	i.dayshome##i.spFT 		$IV2
-	outreg2 using "$results\flexplace_table5C", append 	ctitle(Model 5) $format
+	outreg2 using "$results\flexplace_table5C", append 	ctitle(Model 4) $format drop($IV2)
+svy: reg ccdaily 	i.dayshome##i.spFT 		$IV2
+	outreg2 using "$results\flexplace_table5C", append 	ctitle(Model 5) $format drop($IV2) sortvar(onlyhome ONhomewhy dayshome)
 
 ********************************************************************************
 * Figures
@@ -199,7 +202,7 @@ svy: reg hwdaily 	i.onlyhome##i.spFT 		$IV2
 		title("Partner Work Status", size(medsmall))) 							///
 		xlab(	1 `" "Father Does Not" "Work from Home" "' 						///
 				2 `" "Father Works" "From Home" "') 							///
-		ylab(20(5)70) 															///
+		ylab(0(10)80) 															///
 		ytitle("Housework Minutes Per Day") 									///
 		title("{bf:Figure 1}: Fathers' Time Spent in Routine Housework" 		///
 				"by Fathers' Use of Flexplace Benefits", span)
@@ -215,6 +218,7 @@ svy: reg hwdaily 	i.dayshome##i.spFT 	$IV2
 est store int2		// Store the model estimates in memory
 
 			// Calcuate the predictions for paper write-up
+			margins dayshome, over(spFT)
 			margins, at(dayshome=(0 1 2 3 4) spFT=(0 1)) post
 				mlincom 2-1
 				mlincom 4-3
@@ -243,7 +247,7 @@ est store int2		// Store the model estimates in memory
 		legend(order(1 "Does Not Work Full Time" 3 "Works Full Time") 				///
 		title("Partner Work Status", size(medsmall))) 								///
 		xlab(1 "Never" 2 "< Monthly" 3 "Monthly" 4 "1-2 times/wk" 5 "3 days+/wk") 	///
-		ylab(20(5)75) 																///
+		ylab(0(10)80) 																///
 		ytitle("Housework Minutes Per Day") 										///
 		title("{bf:Figure 2}: Fathers' Daily Minutes Spent in Routine Housework" 	///
 		"by Fathers' Frequency of Using Flexplace Benefits", span) 
