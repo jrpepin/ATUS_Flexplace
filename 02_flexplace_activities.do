@@ -67,36 +67,38 @@ replace 		hwtotal=0 if hwtotal==.
 cap drop		hwall
 egen			hwall 		= total(duration) if hwtotal==1, by(caseid) 
 replace			hwall		=0 if hwall==.
-label var 		hwall "All household work"
 
 // Routine Housework
 cap drop		hwcore
 gen 			hwcore=.
-foreach i in 	020101 	020102	020103	020104	020199		/// 	/* Cleaning Laundry Sewing Storing MiscHW 	*/
-				070101	180701 								/// 	/* Grocery GroTravel					  	*/
-				020201 	020202	020203	020299	{ 					/* Cooking FoodPres Dishes Miscfood 		*/
+foreach i in 	020101 	020102	020103	020104	020199							/// /* Cleaning Laundry Sewing Storing MiscHW 	*/
+				020201 	020202	020203	020299									///	/* Cooking FoodPres Dishes Miscfood 		*/
+				070101	180701 	{ 								 					/* Grocery GroTravel					  	*/
 	replace 	hwcore=1 if activity == `i'
  	 }
 
 cap drop		hwdaily
 egen			hwdaily 	= total(duration) if hwcore==1, by(caseid) 
 replace			hwdaily		=0 if hwdaily==.
-label var 		hwdaily "Routine housework"
 
 // Non-routine Housework
 cap drop 		hwnotd
 gen 			hwnotd=.
-foreach i in 	020401 	020402 	020499 											///
-				020501 	020502 	020599 	180904									///
-				020681 	020699 	180807 	180903									///
-				020701 	020799 	020801 	020899									///
-				020901 	020902 	020903 	020904 	020905 	020999					///
-				029999															///
-				080201 	080202 	080203 	080299									///
-				080701 	080702 	080799 	080699 									///
-				090101 	090102 	090103 	090104 	090199							///
-				090201 	090202 	090299 	090301 	090302 	090399 	090401 			///
-				090402 	090499	090501 	090502 	090599 	099999 	160106			{
+foreach i in 	020301 	020302 	020303 	020399									///	/* Interior 								*/
+				020401 	020402 	020499 											///	/* Exterior 								*/
+				020501 	020502 	020599 	180904									///	/* Lawn 									*/
+				020681 	020699 	180807 	180903									/// /* Petcare 									*/
+				020701 	020799 	020801 	020899									///	/* Vehicle 									*/
+				020901 	020902 	020903 	020904 	020905 	020999					///	/* HHmanage 								*/
+				029999															///	/* Household activities, n.e.c.*			*/
+				080201 	080202 	080203 	080299									/// /* HH banking 								*/
+				080701 	080702 	080799 	080699 									///	/* Veterinary Services						*/
+				090101 	090102 	090103 	090104 	090199							///	/* Household Services (not done by self)	*/
+				090201 	090202 	090299 	090301 	090302 	090399 	 				///	/* HH main/Repair/Décor/Const. (NDBS)		*/
+				090401	090402 	090499											///	/* Lawn & Garden Services (NDBS)			*/
+				090501 	090502 	090599 	099999 	160106							///	/* Vehicle Maintenance & Repair (NDBS)		*/
+				180901	180902	180905	180999	180208	{							/* Travel Related to Using HH Services		*/
+
 	replace 	hwnotd=1 if activity == `i'
  	 }
 replace 		hwnotd=0 if hwnotd==.
@@ -104,7 +106,6 @@ replace 		hwnotd=0 if hwnotd==.
 cap drop		hwelse
 egen			hwelse 		= total(duration) if hwnotd==1, by(caseid) 
 replace			hwelse		=0 if hwelse==.
-label var 		hwelse "Non-routine housework"
 	 
 ********************************************************************************
 * CHILDCARE VARIABLES
@@ -122,23 +123,8 @@ replace 		childcare=0 if childcare==.
 cap drop		ccall
 egen			ccall 		= total(duration) if childcare==1, by(caseid) 
 replace			ccall		=0 if ccall==.
-label var 		ccall "All Childcare"
 
-// Physical childcare
-cap drop		physicalcc
-gen 			physicalcc=.
-foreach i in 		030101 		{
-	replace 	physicalcc=1 if activity == `i'
- 	 }
-replace 		physicalcc=0 if physicalcc==.
-
-cap drop		ccphys
-egen			ccphys 		= total(duration) if physicalcc==1, by(caseid) 
-replace			ccphys		=0 if ccphys==.
-label var 		ccphys "Physical Childcare"
-
-// Daily childcare
-*?*?*?*? Think about replacing physical with routine??
+// Routine childcare
 cap drop		dailycare
 gen 			dailycare=.
 foreach i in 		030101 	030108	030109	030110 	030111 	030112 	030199 		///
@@ -151,12 +137,30 @@ replace			dailycare=0 if dailycar==.
 cap drop		ccdaily
 egen			ccdaily 	= total(duration) if dailycare==1, by(caseid) 
 replace			ccdaily		=0 if ccdaily==.
-label var		ccdaily "Routine care of kids"
+
+// Physical childcare
+cap drop		physicalcc
+gen 			physicalcc=.
+foreach i in 		030101 		{
+	replace 	physicalcc=1 if activity == `i'
+ 	 }
+replace 		physicalcc=0 if physicalcc==.
+
+cap drop		ccphys
+egen			ccphys 		= total(duration) if physicalcc==1, by(caseid) 
+replace			ccphys		=0 if ccphys==.
 
 ********************************************************************************
 * Create Summary Activity variables
 ********************************************************************************
 collapse (max) hwall hwdaily hwelse ccall ccphys ccdaily, by(caseid)
+
+label var 	hwall	"All housework"
+label var 	hwdaily "Routine housework"
+label var 	hwelse	"Non-routine housework"
+label var 	ccall	"All Childcare"
+label var	ccdaily	"Routine care of kids"
+label var 	ccphys	"Physical Childcare"
 
 ********************************************************************************
 * Merge with demographic dataset
