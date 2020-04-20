@@ -1,11 +1,11 @@
 *-------------------------------------------------------------------------------
 * FLEXPLACE PROJECT - American Time Use Surveys
 * flexplaceATUS.do
-* Richard Petts and Joanna Pepin
+* By: Daniel Carlson, Richard Petts, Joanna Pepin
 *-------------------------------------------------------------------------------
 * The goal of these files is to investigate the association between 
-* partnered heterosexual fathers’ time working from home and time spent in 
-* housework and childcare
+* time spent working from home among fathers in different-sex partnerships
+* and time spent in housework and childcare
 
 ********************************************************************************
 * A. ENVIRONMENT
@@ -14,7 +14,7 @@
 // Directory -------------------------------------------------------------------
 * The current directory is assumed to be the base project directory.
 * change to the directory before running flexplaceATUS.do
- cd "C:\Users\Joanna\Dropbox\Repositories\ATUS_Flexplace" 
+* cd "...\Repositories\ATUS_Flexplace" 
 
 // Create & run the setup script------------------------------------------------
 * Create a personal setup file using the setup_flexplaceATUS_example.do script 

@@ -1,7 +1,7 @@
 *-------------------------------------------------------------------------------
 * FLEXPLACE PROJECT - American Time Use Surveys
 * flexplace_activities.do
-* Richard Petts and Joanna Pepin
+* By: Daniel Carlson, Richard Petts, Joanna Pepin
 *-------------------------------------------------------------------------------
 * The goal of this file is to create the activity variables.
 

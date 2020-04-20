@@ -1,14 +1,11 @@
 *-------------------------------------------------------------------------------
 * FLEXPLACE PROJECT - American Time Use Surveys
 * setup_flexplaceATUS_environment.do
-* Richard Petts and Joanna Pepin
+* By: Daniel Carlson, Richard Petts, Joanna Pepin
 *-------------------------------------------------------------------------------
 
-* NOTE: This assumes that you have egenmore installed. If you do not have
-* egenmore installed ssc install the program.
-
 * The current directory is assumed to be the base project directory.
-*  cd "C:\Users\Joanna\Dropbox\Repositories\ATUS_Flexplace"
+*  cd "...\Repositories\ATUS_Flexplace"
 
 ********************************************************************************
 * Setup project macros

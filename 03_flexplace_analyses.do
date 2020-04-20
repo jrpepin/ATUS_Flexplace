@@ -1,7 +1,7 @@
 *-------------------------------------------------------------------------------
 * FLEXPLACE PROJECT - American Time Use Surveys
 * flexplace_analyses.do
-* Richard Petts and Joanna Pepin
+* By: Daniel Carlson, Richard Petts, Joanna Pepin
 *-------------------------------------------------------------------------------
 * The goal of this file is to create the tables and figures.
 * The data used in this file was produced by 02_flexplace_activities
