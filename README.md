@@ -1,6 +1,7 @@
 # ATUS_Flexplace
 Flexplace work and fathers' childcare and housework  
 By: Daniel Carlson, Richard Petts, Joanna Pepin
+Current working paper avaiable on [SocArXiv](10.31235/osf.io/jm2yu)
 
 -------------------------------------------------------------------------------
 The goal of these files is to investigate the association between time spent working from home, among fathers in different-sex partnerships, and time spent in housework and childcare.
