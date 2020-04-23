@@ -152,9 +152,22 @@ svy: reg ccall 		ib5.ONhomewhy##i.spFT 	$IV2
 svy: reg ccdaily 	ib5.ONhomewhy##i.spFT 	$IV2
 	outreg2 using "$results\flexplace_table5B", append 	ctitle(Model 5) $format drop($IV2) sortvar(onlyhome ONhomewhy dayshome)
 
-	// Calculate predicted minutes
+	// Calculate predicted minutes for paper write-up
 	svy: reg hwdaily 	ib5.ONhomewhy##i.spFT 	$IV2
 	margins ONhomewhy, over(spFT)
+	margins, at(ONhomewhy=(1 2 3 4 5) spFT=(0 1)) post
+			mlincom 2-1
+			mlincom 4-3
+			mlincom (4-3) - (2-1)
+			mlincom 6-5
+			mlincom (4-3) - (6-5)
+			mlincom 8-7
+			mlincom (4-3) - (8-7)
+			mlincom 10-9
+			mlincom (4-3)- (10-9)
+			mlincom 4-10
+			mlincom 4-6
+			mlincom 4-8
 
 // Panel C: DAYS WORK FROM HOME ------------------------------------------------
 svy: reg hwall 		i.dayshome##i.spFT 		$IV2
@@ -182,6 +195,7 @@ svy: reg hwdaily 	i.onlyhome##i.spFT 		$IV2
 				mlincom 4-3
 				mlincom 4-2
 				mlincom 3-1
+				mlincom 4-1
 				mlincom (4-2) - (3-1)
 
 	// Predicted estimtes when partner not-employed full-time
@@ -229,6 +243,9 @@ est store int2		// Store the model estimates in memory
 				mlincom (8-7) - (2-1)
 				mlincom 10-9
 				mlincom (10-9)- (2-1)
+				mlincom 10-8
+				mlincom 10-4
+				mlincom 8-4
 
 	// Predicted estimtes when partner not-employed full-time
 	est restore int2
